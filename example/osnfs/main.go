@@ -5,7 +5,6 @@ import (
 	"net"
 	"os"
 
-	osfs "github.com/go-git/go-billy/v5/osfs"
 	nfs "github.com/willscott/go-nfs"
 	nfshelper "github.com/willscott/go-nfs/helpers"
 )
@@ -26,10 +25,9 @@ func main() {
 	}
 	fmt.Printf("osnfs server running at %s\n", listener.Addr())
 
-	bfs := osfs.New(os.Args[1])
-	bfsPlusChange := NewChangeOSFS(bfs)
+	dfs := os.DirFS("")
 
-	handler := nfshelper.NewNullAuthHandler(bfsPlusChange)
+	handler := nfshelper.NewNullAuthHandler(dfs)
 	cacheHelper := nfshelper.NewCachingHandler(handler, 1024)
 	fmt.Printf("%v", nfs.Serve(listener, cacheHelper))
 }

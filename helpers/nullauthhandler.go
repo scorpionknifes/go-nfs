@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"io/fs"
 	"net"
 
 	"github.com/go-git/go-billy/v5"
@@ -9,17 +10,17 @@ import (
 )
 
 // NewNullAuthHandler creates a handler for the provided filesystem
-func NewNullAuthHandler(fs billy.Filesystem) nfs.Handler {
+func NewNullAuthHandler(fs fs.FS) nfs.Handler {
 	return &NullAuthHandler{fs}
 }
 
 // NullAuthHandler returns a NFS backing that exposes a given file system in response to all mount requests.
 type NullAuthHandler struct {
-	fs billy.Filesystem
+	fs fs.FS
 }
 
 // Mount backs Mount RPC Requests, allowing for access control policies.
-func (h *NullAuthHandler) Mount(ctx context.Context, conn net.Conn, req nfs.MountRequest) (status nfs.MountStatus, hndl billy.Filesystem, auths []nfs.AuthFlavor) {
+func (h *NullAuthHandler) Mount(ctx context.Context, conn net.Conn, req nfs.MountRequest) (status nfs.MountStatus, hndl fs.FS, auths []nfs.AuthFlavor) {
 	status = nfs.MountStatusOk
 	hndl = h.fs
 	auths = []nfs.AuthFlavor{nfs.AuthFlavorNull}
@@ -27,7 +28,7 @@ func (h *NullAuthHandler) Mount(ctx context.Context, conn net.Conn, req nfs.Moun
 }
 
 // Change provides an interface for updating file attributes.
-func (h *NullAuthHandler) Change(fs billy.Filesystem) billy.Change {
+func (h *NullAuthHandler) Change(fs fs.FS) billy.Change {
 	if c, ok := h.fs.(billy.Change); ok {
 		return c
 	}
@@ -35,17 +36,17 @@ func (h *NullAuthHandler) Change(fs billy.Filesystem) billy.Change {
 }
 
 // FSStat provides information about a filesystem.
-func (h *NullAuthHandler) FSStat(ctx context.Context, f billy.Filesystem, s *nfs.FSStat) error {
+func (h *NullAuthHandler) FSStat(ctx context.Context, f fs.FS, s *nfs.FSStat) error {
 	return nil
 }
 
 // ToHandle handled by CachingHandler
-func (h *NullAuthHandler) ToHandle(f billy.Filesystem, s []string) []byte {
+func (h *NullAuthHandler) ToHandle(f fs.FS, s []string) []byte {
 	return []byte{}
 }
 
 // FromHandle handled by CachingHandler
-func (h *NullAuthHandler) FromHandle([]byte) (billy.Filesystem, []string, error) {
+func (h *NullAuthHandler) FromHandle([]byte) (fs.FS, []string, error) {
 	return nil, []string{}, nil
 }
 

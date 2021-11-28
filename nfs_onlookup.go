@@ -88,6 +88,6 @@ func onLookup(ctx context.Context, w *response, userHandle Handler) error {
 		}
 	}
 
-	fmt.Printf("No file for lookup of %v\n", string(obj.Filename))
+	fmt.Printf("No file for lookup of %v\n\n", string(obj.Filename))
 	return &NFSStatusError{NFSStatusNoEnt, os.ErrNotExist}
 }

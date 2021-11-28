@@ -199,17 +199,12 @@ type SetFileAttributes struct {
 // Apply uses a `Change` implementation to set defined attributes on a
 // provided file.
 func (s *SetFileAttributes) Apply(changer filesystem.Change, fs fs.FS, file string) error {
-	curOS, err := filesystem.Lstat(fs, file)
+	curInfo, err := filesystem.Lstat(fs, file)
 	if errors.Is(err, os.ErrNotExist) {
 		return &NFSStatusError{NFSStatusNoEnt, os.ErrNotExist}
 	} else if errors.Is(err, os.ErrPermission) {
 		return &NFSStatusError{NFSStatusAccess, os.ErrPermission}
 	} else if err != nil {
-		return nil
-	}
-
-	curInfo, err := curOS.Stat()
-	if err != nil {
 		return nil
 	}
 

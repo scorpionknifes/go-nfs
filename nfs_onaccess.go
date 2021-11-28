@@ -30,7 +30,7 @@ func onAccess(ctx context.Context, w *response, userHandle Handler) error {
 		return &NFSStatusError{NFSStatusServerFault, err}
 	}
 
-	if filesystem.WriteCapabilityCheck(fs) {
+	if !filesystem.WriteCapabilityCheck(fs) {
 		mask = mask & (1 | 2 | 0x20)
 	}
 

@@ -73,7 +73,7 @@ func onFSInfo(ctx context.Context, w *response, userHandle Handler) error {
 	// to support granular PATHINFO responses.
 	res.Properties |= FSInfoPropertyHomogeneous
 	// TODO: not a perfect indicator
-	if filesystem.WriteCapabilityCheck(fs) {
+	if !filesystem.WriteCapabilityCheck(fs) {
 		res.Properties |= FSInfoPropertyCanSetTime
 	}
 	// TODO: this whole struct should be specifiable by the userhandler.

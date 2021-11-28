@@ -27,7 +27,7 @@ func onFSStat(ctx context.Context, w *response, userHandle Handler) error {
 		AvailableFiles: 1 << 62,
 		CacheHint:      0,
 	}
-	if filesystem.WriteCapabilityCheck(fs) {
+	if !filesystem.WriteCapabilityCheck(fs) {
 		defaults.AvailableFiles = 0
 		defaults.AvailableSize = 0
 	}

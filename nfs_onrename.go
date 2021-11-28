@@ -35,7 +35,7 @@ func onRename(ctx context.Context, w *response, userHandle Handler) error {
 		return &NFSStatusError{NFSStatusNotSupp, os.ErrPermission}
 	}
 
-	if filesystem.WriteCapabilityCheck(fs) {
+	if !filesystem.WriteCapabilityCheck(fs) {
 		return &NFSStatusError{NFSStatusROFS, os.ErrPermission}
 	}
 

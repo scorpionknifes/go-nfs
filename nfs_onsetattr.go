@@ -28,16 +28,11 @@ func onSetAttr(ctx context.Context, w *response, userHandle Handler) error {
 		return &NFSStatusError{NFSStatusInval, err}
 	}
 
-	file, err := filesystem.Lstat(fs, filesystem.Join(fs, path...))
+	info, err := filesystem.Lstat(fs, filesystem.Join(fs, path...))
 	if err != nil {
 		if os.IsNotExist(err) {
 			return &NFSStatusError{NFSStatusNoEnt, err}
 		}
-		return &NFSStatusError{NFSStatusAccess, err}
-	}
-
-	info, err := file.Stat()
-	if err != nil {
 		return &NFSStatusError{NFSStatusAccess, err}
 	}
 
@@ -68,7 +63,7 @@ func onSetAttr(ctx context.Context, w *response, userHandle Handler) error {
 	TIME_GOOD:
 	}
 
-	if filesystem.WriteCapabilityCheck(fs) {
+	if !filesystem.WriteCapabilityCheck(fs) {
 		return &NFSStatusError{NFSStatusROFS, os.ErrPermission}
 	}
 

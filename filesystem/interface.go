@@ -6,6 +6,22 @@ import (
 )
 
 // Interface for filesystems
+type JoinFS interface {
+	fs.FS
+	Join(elem ...string) string
+}
+
+type StatFS interface {
+	fs.FS
+	Stat(name string) (fs.FileInfo, error)
+}
+
+type ReadDirFS interface {
+	fs.FS
+	ReadDir(name string) ([]fs.DirEntry, error)
+}
+
+// inteface for filesystems that support writing
 type WriteFileFS interface {
 	fs.FS
 	WriteFile(name string, data []byte, mode fs.FileMode) error
@@ -16,11 +32,6 @@ type MkdirAllFS interface {
 	MkdirAll(path string, perm fs.FileMode) error
 }
 
-type ReadDirFS interface {
-	fs.FS
-	ReadDir(name string) ([]fs.DirEntry, error)
-}
-
 type CreateFS interface {
 	fs.FS
 	Create(name string) (fs.File, error)
@@ -29,15 +40,6 @@ type CreateFS interface {
 type OpenFileFS interface {
 	fs.FS
 	OpenFile(name string, flag int, perm fs.FileMode) (fs.File, error)
-}
-
-type StatFS interface {
-	fs.FS
-	Stat(name string) (fs.FileInfo, error)
-}
-
-type JoinFS interface {
-	Join(elem ...string) string
 }
 
 type ChmodFS interface {
@@ -75,9 +77,9 @@ type RenameFS interface {
 	Rename(oldname string, newname string) error
 }
 
-type LStatFS interface {
+type LstatFS interface {
 	fs.FS
-	LStat(name string) (fs.FileInfo, error)
+	Lstat(name string) (fs.FileInfo, error)
 }
 
 type SymlinkFS interface {
@@ -88,7 +90,7 @@ type SymlinkFS interface {
 // Intefaces for file operations
 type ReadAtFile interface {
 	fs.File
-	ReadAt(p []byte, off int64) (n int, err error)
+	ReadAt(p []byte, off int64) (int, error)
 }
 
 type SeekFile interface {

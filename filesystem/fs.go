@@ -31,7 +31,7 @@ func Stat(fs iofs.FS, filename string) (fs.FileInfo, error) {
 }
 
 func ReadDir(fs iofs.FS, name string) ([]fs.DirEntry, error) {
-	if FS, ok := fs.(ReadDirFS); ok {
+	if FS, ok := fs.(iofs.ReadDirFS); ok {
 		return FS.ReadDir(name)
 	}
 
@@ -103,6 +103,7 @@ func Remove(fs iofs.FS, name string) error {
 }
 
 func WriteCapabilityCheck(fs iofs.FS) bool {
-	_, ok := fs.(WriteFileFS)
+	// MkdirAll is required for a writable NFS mount
+	_, ok := fs.(MkdirAllFS)
 	return ok
 }

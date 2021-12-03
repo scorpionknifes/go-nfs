@@ -27,6 +27,7 @@ func main() {
 	fmt.Printf("osnfs server running at %s\n", listener.Addr())
 
 	dfs := filesystem.NewDirFSWrapper(os.Args[1])
+	//dfs := os.DirFS(os.Args[1])
 
 	handler := nfshelper.NewNullAuthHandler(dfs)
 	cacheHelper := nfshelper.NewCachingHandler(handler, 1024)

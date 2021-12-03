@@ -1,6 +1,7 @@
 package filesystem_test
 
 import (
+	"io/fs"
 	"testing"
 
 	"github.com/willscott/go-nfs/filesystem"
@@ -14,11 +15,11 @@ func TestCheckInterfacesDirWrapperFS(t *testing.T) {
 		t.Errorf("os.DirFS should implement JoinFS")
 	}
 
-	if _, ok := dfs.(filesystem.StatFS); !ok {
+	if _, ok := dfs.(fs.StatFS); !ok {
 		t.Errorf("os.DirFS should implement StatFS")
 	}
 
-	if _, ok := dfs.(filesystem.ReadDirFS); !ok {
+	if _, ok := dfs.(fs.ReadDirFS); !ok {
 		t.Errorf("os.DirFS should implement ReadDirFS")
 	}
 

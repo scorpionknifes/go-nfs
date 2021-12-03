@@ -11,16 +11,6 @@ type JoinFS interface {
 	Join(elem ...string) string
 }
 
-type StatFS interface {
-	fs.FS
-	Stat(name string) (fs.FileInfo, error)
-}
-
-type ReadDirFS interface {
-	fs.FS
-	ReadDir(name string) ([]fs.DirEntry, error)
-}
-
 // inteface for filesystems that support writing
 type WriteFileFS interface {
 	fs.FS

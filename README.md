@@ -1,6 +1,8 @@
 Golang Network File Server
 ===
 
+# :warning: Progress on this fork has been halted and progress has been moved to https://github.com/willscott/go-nfs/tree/feat/iofs
+
 NFSv3 protocol implementation in pure Golang.
 
 Current Status:

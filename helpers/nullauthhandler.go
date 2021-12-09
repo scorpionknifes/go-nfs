@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-git/go-billy/v5"
 	"github.com/willscott/go-nfs"
+	"github.com/willscott/go-nfs/filesystem"
 )
 
 // NewNullAuthHandler creates a handler for the provided filesystem
@@ -29,7 +30,7 @@ func (h *NullAuthHandler) Mount(ctx context.Context, conn net.Conn, req nfs.Moun
 
 // Change provides an interface for updating file attributes.
 func (h *NullAuthHandler) Change(fs fs.FS) billy.Change {
-	if c, ok := h.fs.(billy.Change); ok {
+	if c, ok := h.fs.(filesystem.Change); ok {
 		return c
 	}
 	return nil

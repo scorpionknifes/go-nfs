@@ -8,7 +8,7 @@ import (
 )
 
 func TestCheckInterfacesDirWrapperFS(t *testing.T) {
-	dfs := filesystem.NewDirFSWrapper(".")
+	dfs := filesystem.NewWriteDirFSWrapper(".")
 
 	// Methods that can be substituted by wrapper fs.
 	if _, ok := dfs.(filesystem.JoinFS); !ok {
@@ -35,22 +35,6 @@ func TestCheckInterfacesDirWrapperFS(t *testing.T) {
 		t.Errorf("os.DirFS should implement CreateFS")
 	}
 
-	if _, ok := dfs.(filesystem.ChmodFS); !ok {
-		t.Errorf("os.DirFS should implement ChmodFS")
-	}
-
-	if _, ok := dfs.(filesystem.LchownFS); !ok {
-		t.Errorf("os.DirFS should implement LchownFS")
-	}
-
-	if _, ok := dfs.(filesystem.ChownFS); !ok {
-		t.Errorf("os.DirFS should implement ChownFS")
-	}
-
-	if _, ok := dfs.(filesystem.ChtimesFS); !ok {
-		t.Errorf("os.DirFS should implement ChtimesFS")
-	}
-
 	if _, ok := dfs.(filesystem.ReadlinkFS); !ok {
 		t.Errorf("os.DirFS should implement ReadlinkFS")
 	}
@@ -72,11 +56,31 @@ func TestCheckInterfacesDirWrapperFS(t *testing.T) {
 	}
 }
 
+func TestCheckInterfacesDirWithChangeWrapper(t *testing.T) {
+	dfsc := filesystem.NewWriteDirFSWithChangeWrapper(".")
+
+	if _, ok := dfsc.(filesystem.ChmodFS); !ok {
+		t.Errorf("os.DirFS should implement ChmodFS")
+	}
+
+	if _, ok := dfsc.(filesystem.LchownFS); !ok {
+		t.Errorf("os.DirFS should implement LchownFS")
+	}
+
+	if _, ok := dfsc.(filesystem.ChownFS); !ok {
+		t.Errorf("os.DirFS should implement ChownFS")
+	}
+
+	if _, ok := dfsc.(filesystem.ChtimesFS); !ok {
+		t.Errorf("os.DirFS should implement ChtimesFS")
+	}
+}
+
 func TestCheckInterfacesDirWrapperFile(t *testing.T) {
-	dfs := filesystem.NewDirFSWrapper(".")
+	dfs := filesystem.NewWriteDirFSWrapper(".")
 	file, err := dfs.Open("fs_test.go")
 	if err != nil {
-		t.Errorf("os.DirFS.Open: %w", err)
+		t.Errorf("os.DirFS.Open: %v", err)
 		return
 	}
 
